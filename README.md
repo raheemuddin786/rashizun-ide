@@ -4,10 +4,11 @@ Rashizun is an AI-native Development Orchestrator built as a telemetry-free "Cle
 
 ## Core Features
 - **7-Stage Lifecycle Sidebar**: Structured guided development from Discovery to Maintenance.
+- **Dual Mode Operation**: Support for both **Global Web Orchestrator** and **Native Desktop Orchestrator** (air-gapped/local) modes.
 - **Project Ledger**: Immutable history and architectural provenance in `.rashizun/ledger.json`.
-- **Builder-Architect Pattern**: IDE-led validated file writes with shadow compilation.
-- **Global Web Access**: Secure tunneling for browser-based development anywhere.
-- **Privacy-First**: No telemetry, proprietary Microsoft services stripped.
+- **Token Efficiency**: 80-90% reduction in external tokens via local WebGPU "Ghost Text" and hybrid inference.
+- **Builder-Architect Pattern**: IDE-led validated file writes with background shadow compilation and security scans.
+- **Privacy-First**: Zero telemetry, proprietary Microsoft services stripped, and local-first AI stack.
 
 ## Documentation
 - [Master Specification](docs/master_specification.md)

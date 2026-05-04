@@ -16,17 +16,17 @@ The sidebar acts as a persistent state machine, guiding the developer through a 
 *   **User Scenario**: You ask how to store data. AI suggests **Polyglot Persistence** (SQL for transactions, NoSQL for images).
 
 ### 3. Sprint Planning
-*   **Focus**: Workload estimation and visual prototyping.
-*   **AI Action**: Low-code visual prototyping to see the UI before writing production code.
-*   **Interconnection**: Design decisions are tracked to ensure the subsequent development matches the plan.
+*   **Focus**: Resource allocation, workload estimation, and **Visual Prototyping**.
+*   **AI Action**: Integrates low-code tools for rapid visual mockups and drag-and-drop sketching.
+*   **Ledger Logging**: Every visual iteration is saved in the Project Ledger, enabling "Action Provenance" for every UI element.
 
 ### 4. Development
-*   **Focus**: Validated coding and "Builder" execution.
+*   **Focus**: Construction and construction validation.
 *   **Workflow**:
-    1. AI proposes code/diff.
-    2. IDE performs **Shadow Compilation** in the background.
-    3. User reviews **Diff View** and functional preview.
-    4. IDE core (not AI) performs the file write upon approval.
+    1. AI proposes code via "Ghost Text" or semantic diff.
+    2. IDE performs **Shadow Compilation** in `.rashizun/shadow-build/`.
+    3. User reviews a **Functional Visual Preview** (Live-Sync) alongside the code diff.
+    4. IDE core (Builder) commits the change only after explicit approval.
 
 ### 5. Testing & Compliance
 *   **Focus**: Security hardening and automated verification.
@@ -61,7 +61,7 @@ The sidebar acts as a persistent state machine, guiding the developer through a 
 
 ---
 
-## Interconnected Features
-*   **RAG Context Continuity**: The AI "remembers" goals from Phase 1 even during Phase 7.
-*   **Shadow Build Loop**: Prevents accepting code that results in broken layouts or runtime errors.
-*   **Project History**: On-click intelligence in the sidebar reveals the "Why" and "How" of every line of code.
+## Interconnected UI Flow
+*   **Direct Selection**: Users can select UI components (e.g., buttons) directly in the functional preview window to prompt modifications.
+*   **Live-Sync System**: Ensures the UI is never a "black box"; every control is a manageable object with specific logic history.
+*   **Auto-Diagnostics**: IDE monitors real-world user interactions in the production environment (Phase 7) and proposes logic fixes for UI failures via RAG context.

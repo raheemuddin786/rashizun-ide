@@ -9,15 +9,13 @@ Unlike traditional IDEs that act as passive text editors, Rashizun functions as 
 
 ## 1. Core Philosophy & Architectural Strategy
 
-### 1.1 The "Clean Fork" Strategy
-*   **Base**: Forked from VSCodium/Code-OSS (telemetry-free, MIT-licensed).
-*   **Upstream Syncing**: Maintains a dedicated `plusplus-main` branch with a remote alias to the official Microsoft repository for easy syncing without logic conflicts.
-*   **Feature Stripping**: Proprietary Microsoft services and telemetry are hard-disabled via `product.json` rather than code deletion to prevent merge conflicts.
-*   **Extension-Core Pattern**: All AI, RAG, and MCP logic is isolated into a built-in extension, ensuring the IDE core remains upgradeable.
-
-### 1.2 The Builder-Architect Pattern
-*   **The AI (Architect)**: Proposes plans, generates semantic diffs, and provides strategic guidance.
-*   **The IDE (Builder)**: Maintains exclusive authority over the file system. It validates AI suggestions, performs shadow builds, and executes writes only after human approval.
+### 1.1 Core Architectural Strategy: The "Clean Fork"
+*   **Base Foundation**: Built on VSCodium/Code-OSS to strip proprietary Microsoft services.
+*   **Upstream Syncing**: Uses a dedicated `rashizun-main` branch with a remote alias to the official VS Code repo for upstream syncing.
+*   **Dual Mode Operation**:
+    *   **Web Orchestrator**: Code-OSS Server delivery for global browser access via secure tunnels.
+    *   **Native Desktop Orchestrator**: Full Electron-based application for air-gapped, privacy-first local development.
+*   **The Builder-Architect Pattern**: The AI is the "Architect" (reasoning), and the IDE core is the "Builder" (execution). File writes only occur after human approval and background "Shadow Compilation" validation.
 
 ---
 
@@ -46,14 +44,13 @@ A hidden file that acts as the project's permanent memory, storing:
 ## 3. AI & Agentic Infrastructure
 
 ### 3.1 Integrated AI Core
-*   **Provider Switching**: Native support for local models (Ollama, vLLM) and cloud models (OpenAI, Anthropic) via the `vscode.lm` API.
-*   **Hybrid Inference Engine**: Uses **WebGPU (WebLLM)** for instant, low-latency "Ghost Text" autocomplete in the browser, while offloading complex RAG tasks to a server backend.
-*   **AI Runtime Layer**: An "OS for AI" managing KV cache compression, model switching, and cost optimization.
+*   **Hybrid Inference Engine**: Uses **WebGPU (WebLLM)** for instant browser-based "Ghost Text" autocomplete (Internal Tokens), offloading complex RAG tasks to a server-side or local GPU (External/Architect Tokens).
+*   **Token Optimization**: Achieves an **80-90% reduction in external token volume** compared to standard cloud-first AI IDEs by shifting high-frequency tasks to local execution.
+*   **Mixture of Agents (MoA)**: Automatically selects the most cost-effective model for sub-tasks (e.g., small local models for debugging vs. large models for architecture).
 
-### 3.2 Model Context Protocol (MCP) & Skills
-*   **Self-MCP**: The IDE acts as its own MCP server, exposing internal state (open files, terminal) to autonomous agents.
-*   **Skill Registry**: A UI to define and install "Skills" (e.g., "Write a unit test") mapped to specific AI tools.
-*   **Autonomous Agents**: Support for multi-file coordination and "Composer" functionality for atomic refactors across multiple repositories.
+### 3.2 Contextual RAG & Memory
+*   **Semantic Fingerprinting**: Uses **Merkle trees** to provide a semantic map of file relationships, allowing agents to understand codebase structure without reading raw tokens.
+*   **Self-MCP & Skill Registry**: The IDE acts as its own MCP server, exposing state via STDIO (local) or HTTP (remote) to autonomous agents.
 
 ### 3.3 Contextual RAG
 *   **Knowledge Base**: Local vector database (FAISS/LanceDB) for project-wide retrieval.
@@ -63,16 +60,13 @@ A hidden file that acts as the project's permanent memory, storing:
 
 ## 4. Execution Guardrails & Security
 
-### 4.1 Inference Middleware
-*   **Request Validation**: Every prompt is intercepted by a lightweight "Validator Model" to ensure relevancy to the active SDLC stage.
-*   **Intent-First Explanation**: The AI must provide a "Plan of Action" (short 1-2 sentence reply) before any file changes are proposed.
-
-### 4.2 The "Builder" Safety Loop
-1.  **Diff Generation**: LLM provides a semantic diff.
-2.  **Shadow Compilation**: The IDE core automatically attempts a background build of proposed changes.
-3.  **Security Scan**: Real-time SAST/DAST and License Compliance scanning.
-4.  **User Approval**: Functional preview and diff are presented for final human verification.
-5.  **IDE Write**: The IDE core commits the change only after explicit approval.
+### 4.1 Execution Guardrails (The 6-Step Loop)
+1.  **Inference Middleware**: Local 1B-3B model checks prompt relevancy to the active SDLC phase.
+2.  **Intent Explanation**: AI provides a 1-2 sentence "Plan of Action" before suggesting changes.
+3.  **Semantic Diff**: AI generates a diff rather than writing directly to files.
+4.  **Shadow Compilation**: IDE core runs background builds in `.rashizun/shadow-build/` to verify code integrity.
+5.  **Security & Compliance**: Real-time SAST/DAST and **License Compliance Scanning** (ensuring no "Clean Room" violations).
+6.  **Human Approval**: User reviews the diff and a **Functional Visual Preview** before the final IDE write.
 
 ---
 
@@ -96,12 +90,12 @@ A hidden file that acts as the project's permanent memory, storing:
 
 ## 6. Hardware & Build Requirements
 
-| Component | Minimum for Building | 2026 Enterprise Recommended |
+| Component | Requirement (Web/Server Mode) | Requirement (Local Workstation Mode) |
 | :--- | :--- | :--- |
-| **CPU** | Quad-core 1.8 GHz+ | 16+ Cores (ARM64 or x64) |
-| **RAM** | 16 GB | 64 GB |
-| **Storage** | 50 GB SSD | 200 GB+ NVMe SSD |
-| **GPU** | Integrated | Dedicated (12 GB+ VRAM) |
+| **CPU** | 8+ Cores | 16+ Cores (Handles UI + RAG + Inference) |
+| **RAM** | 32 GB | 64 GB (Essential for local vector store) |
+| **Storage** | 100 GB SSD | 200 GB+ NVMe SSD (High IO for Shadow Builds) |
+| **GPU** | 8 GB VRAM | 12 GB+ Dedicated VRAM (Local Ghost Text) |
 
 ---
 
