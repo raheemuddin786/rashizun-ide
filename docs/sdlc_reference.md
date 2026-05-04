@@ -1,6 +1,6 @@
-# Rashidun SDLC & User Scenarios
+# Rashizun SDLC & User Scenarios
 
-This document provides a detailed reference for the 7-stage software development lifecycle (SDLC) integrated into the Rashidun IDE, along with real-world user scenarios.
+This document provides a detailed reference for the 7-stage software development lifecycle (SDLC) integrated into the Rashizun IDE, along with real-world user scenarios.
 
 ## The 7-Stage Lifecycle Sidebar
 The sidebar acts as a persistent state machine, guiding the developer through a "Rightly Guided" path.
@@ -8,7 +8,7 @@ The sidebar acts as a persistent state machine, guiding the developer through a 
 ### 1. Discovery
 *   **Focus**: MVP definition, business logic, and high-level requirements.
 *   **AI Action**: Analyzes prompt for compliance (e.g., GDPR, PCI-DSS) and establishing FinOps cost guardrails.
-*   **Outcome**: Initial project goals logged in the `.rashidun/ledger.json`.
+*   **Outcome**: Initial project goals logged in the `.rashizun/ledger.json`.
 
 ### 2. Architecture
 *   **Focus**: Blueprinting, database selection, and security design.
@@ -47,7 +47,7 @@ The sidebar acts as a persistent state machine, guiding the developer through a 
 ## User Scenarios
 
 ### Scenario A: Building a "Secure Inventory Tracker"
-1.  **Setup**: You open Rashidun in a browser on a tablet. Heavy processing is offloaded to your home server.
+1.  **Setup**: You open Rashizun in a browser on a tablet. Heavy processing is offloaded to your home server.
 2.  **Discovery**: You prompt: "I want a secure app for warehouse inventory with barcode support." AI defines the MVP and saves it to the ledger.
 3.  **Architecture**: AI suggests SQL for counts and NoSQL for images. This decision is indexed for later RAG queries.
 4.  **Development**: You start the barcode scanner logic. AI suggests a diff; IDE runs a background build. You click "Accept" to commit.

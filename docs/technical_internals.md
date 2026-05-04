@@ -1,20 +1,20 @@
-# Rashidun Technical Internals & Infrastructure
+# Rashizun Technical Internals & Infrastructure
 
-This document details the internal mechanisms that enable Rashidun to function as a "Development Orchestrator."
+This document details the internal mechanisms that enable Rashizun to function as a "Development Orchestrator."
 
 ## 1. Inference Middleware (The "Guardrail")
-To ensure every AI request is valid and relevant, Rashidun implements an Inference Middleware layer.
+To ensure every AI request is valid and relevant, Rashizun implements an Inference Middleware layer.
 *   **Validator Model**: A lightweight 1B-3B parameter model (running locally via WebGPU) that intercepts every prompt.
 *   **Relevancy Check**: Verifies the prompt aligns with the active Lifecycle Sidebar stage (e.g., preventing a "Deploy" request if the project is still in "Discovery").
 *   **Intent-First Reply**: Before execution, the AI must generate a "Plan of Action" (e.g., "I will refactor the API to use OAuth2...").
 
-## 2. Project Ledger (`.rashidun/ledger.json`)
+## 2. Project Ledger (`.rashizun/ledger.json`)
 The ledger is the project's source of truth for all non-code metadata.
 
 ### 2.1 Schema Outline (Conceptual)
 ```json
 {
-  "project_id": "rashidun-inv-tracker",
+  "project_id": "rashizun-inv-tracker",
   "lifecycle": {
     "discovery": {
       "mvp": "Barcode inventory system",
@@ -44,7 +44,7 @@ The IDE core (not the LLM) has exclusive write access to the filesystem.
 *   **Output**: The IDE core writes to the file only after these checks pass and the user clicks "Accept."
 
 ## 4. Model Context Protocol (MCP) Integration
-*   **Self-MCP Server**: Rashidun exposes its internal state (AST, terminals, open editors) to AI agents via MCP.
+*   **Self-MCP Server**: Rashizun exposes its internal state (AST, terminals, open editors) to AI agents via MCP.
 *   **Skill Registry**: Users can define "Skills" (e.g., `generate-tests`) that map to specific MCP tools.
 *   **Global Orchestration**: Allows for multi-repository refactoring where the AI coordinates changes across several related codebases.
 

@@ -1,9 +1,9 @@
-# Rashidun Project: Master Specification
+# Rashizun Project: Master Specification
 
 ## Executive Summary
-**Rashidun** (Arabic: راشدون, "The Rightly Guided") is an AI-native Development Orchestrator designed for the 2026 enterprise landscape. It is built as a "Clean Fork" of VS Code (leveraging VSCodium/Code-OSS) to provide a telemetry-free, security-first, and highly structured development environment. 
+**Rashizun** (Arabic: راشدون, "The Rightly Guided") is an AI-native Development Orchestrator designed for the 2026 enterprise landscape. It is built as a "Clean Fork" of VS Code (leveraging VSCodium/Code-OSS) to provide a telemetry-free, security-first, and highly structured development environment. 
 
-Unlike traditional IDEs that act as passive text editors, Rashidun functions as a **Development Orchestrator** that bridges high-level architectural governance with daily coding tasks through an interconnected "Project Nervous System."
+Unlike traditional IDEs that act as passive text editors, Rashizun functions as a **Development Orchestrator** that bridges high-level architectural governance with daily coding tasks through an interconnected "Project Nervous System."
 
 ---
 
@@ -23,7 +23,7 @@ Unlike traditional IDEs that act as passive text editors, Rashidun functions as 
 
 ## 2. The 2026 Enterprise SDLC Lifecycle
 
-Rashidun integrates the entire software development lifecycle into a persistent **Sidebar Navigation** tree-view.
+Rashizun integrates the entire software development lifecycle into a persistent **Sidebar Navigation** tree-view.
 
 ### 2.1 The 7-Stage Lifecycle
 1.  **Discovery**: MVP definition, strategic alignment, and FinOps cloud cost forecasting.
@@ -34,7 +34,7 @@ Rashidun integrates the entire software development lifecycle into a persistent 
 6.  **Deployment**: Cloud-agnostic deployment via MCP skills (AWS, GCP, Kubernetes).
 7.  **Maintenance & MLOps**: Continuous monitoring for "model drift," performance observability, and automated retraining loops.
 
-### 2.2 The Project Ledger (`.rashidun/ledger.json`)
+### 2.2 The Project Ledger (`.rashizun/ledger.json`)
 A hidden file that acts as the project's permanent memory, storing:
 *   **Prompt History**: Verbatim logs of all AI interactions.
 *   **Architectural Provenance**: The "Why" behind every major decision.
@@ -84,7 +84,7 @@ A hidden file that acts as the project's permanent memory, storing:
 *   **Custom Authentication**: Independent OIDC/JWT/Authelia support to replace Microsoft/GitHub account dependencies.
 
 ### 5.2 Open-Source Replacements
-| Missing Feature | Rashidun Integration Strategy |
+| Missing Feature | Rashizun Integration Strategy |
 | :--- | :--- |
 | Marketplace | Open VSX Registry (primary) + Private/VSIX support |
 | Remote-SSH/WSL | Open-source SSH agents and terminal tunneling |

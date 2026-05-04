@@ -1,10 +1,10 @@
-# Rashidun IDE (The Rightly Guided)
+# Rashizun IDE (The Rightly Guided)
 
-Rashidun is an AI-native Development Orchestrator built as a telemetry-free "Clean Fork" of VS Code. It bridges high-level architectural governance with daily coding tasks through an interconnected "Project Nervous System."
+Rashizun is an AI-native Development Orchestrator built as a telemetry-free "Clean Fork" of VS Code. It bridges high-level architectural governance with daily coding tasks through an interconnected "Project Nervous System."
 
 ## Core Features
 - **7-Stage Lifecycle Sidebar**: Structured guided development from Discovery to Maintenance.
-- **Project Ledger**: Immutable history and architectural provenance in `.rashidun/ledger.json`.
+- **Project Ledger**: Immutable history and architectural provenance in `.rashizun/ledger.json`.
 - **Builder-Architect Pattern**: IDE-led validated file writes with shadow compilation.
 - **Global Web Access**: Secure tunneling for browser-based development anywhere.
 - **Privacy-First**: No telemetry, proprietary Microsoft services stripped.
