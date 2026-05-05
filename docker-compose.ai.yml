@@ -1,24 +1,6 @@
 version: '3.8'
 
 services:
-  # Local LLM and Embedding Engine
-  ollama:
-    image: ollama/ollama:latest
-    container_name: rashizun-ollama
-    volumes:
-      - ./data/ollama:/root/.ollama
-    ports:
-      - "11434:11434"
-    networks:
-      - rashizun-net
-    deploy:
-      resources:
-        reservations:
-          devices:
-            - driver: nvidia
-              count: all
-              capabilities: [gpu]
-
   # RAG Indexing and Retrieval Service
   rag-engine:
     build:
@@ -28,10 +10,10 @@ services:
       - ./data/lancedb:/app/data
       - ./workspace:/app/workspace
     environment:
-      - OLLAMA_HOST=http://ollama:11434
+      - OLLAMA_HOST=http://host.docker.internal:11434
       - LANCEDB_PATH=/app/data
-    depends_on:
-      - ollama
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
     networks:
       - rashizun-net
 
