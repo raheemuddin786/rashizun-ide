@@ -70,4 +70,4 @@ RUN mkdir -p /app/workspace /app/.rashizun /app/data/lancedb
 
 EXPOSE 8443
 
-CMD ["./bin/code-server-oss", "--host", "0.0.0.0", "--port", "8443", "--connection-token", "rashizun-token"]
+CMD ["./bin/rashizun-server", "--host", "0.0.0.0", "--port", "8443", "--connection-token", "rashizun-token"]
