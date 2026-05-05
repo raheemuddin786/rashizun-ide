@@ -1,0 +1,18 @@
+{
+  "name": "rashizun-ide",
+  "version": "1.0.0",
+  "description": "A complete end to end App Management AI agentic IDE",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/raheemuddin786/rashizun-ide.git"
+  },
+  "keywords": [
+    "ide",
+    "ai",
+    "agentic",
+    "orchestrator",
+    "rashizun"
+  ],
+  "author": "Raheemuddin",
+  "license": "MIT"
+}

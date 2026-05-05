@@ -1,0 +1,47 @@
+# Use a stable Ubuntu base for 2026 standards
+FROM ubuntu:24.04
+
+# Prevent interactive prompts during build
+ENV DEBIAN_FRONTEND=noninteractive
+
+# Install core build dependencies for Code-OSS/VSCodium
+RUN apt-get update && apt-get install -y \
+    build-essential \
+    git \
+    python3 \
+    curl \
+    libsecret-1-dev \
+    libx11-dev \
+    libxkbfile-dev \
+    libkrb5-dev \
+    pkg-config \
+    unzip \
+    && rm -rf /var/lib/apt/lists/*
+
+# Install Node.js (matching VS Code's current requirement)
+RUN curl -fsSL https://deb.nodesource.com/setup_20.x | bash - && \
+    apt-get install -y nodejs && \
+    npm install -g yarn
+
+# Set the working directory
+WORKDIR /rashizun
+
+# Note: The original Gemini suggestion cloned a specific branch. 
+# Here we expect the source to be provided via context or volume for local development.
+# However, to follow the instructions precisely for a "start":
+# We will use the current directory as context.
+
+# Copy the build scripts and configuration
+COPY . .
+
+# Install dependencies
+RUN yarn install --frozen-lockfile
+
+# Build the IDE (Desktop Binary and/or Server)
+RUN npm run build
+# For Web IDE support: RUN npm run build-server
+
+# Define the output volume for the generated IDE
+VOLUME [ "/rashizun/out" ]
+
+CMD ["cp", "-r", "/rashizun/out-vscode-min", "/rashizun/out/dist"]

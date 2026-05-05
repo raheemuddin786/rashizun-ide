@@ -1,0 +1,44 @@
+{
+  "project_id": "rashizun-ide",
+  "name": "Rashizun IDE (The Rightly Guided)",
+  "created_at": "2026-05-05T08:34:00Z",
+  "sdlc_phase": "Development",
+  "provenance": {
+    "initial_fork": {
+      "source": "https://github.com/vscodium/vscodium",
+      "timestamp": "2026-05-05T08:27:00Z",
+      "strategy": "Clean Fork / Telemetry-Free"
+    },
+    "adaptations": [
+      {
+        "type": "Branding",
+        "details": "Renamed from Rashidun to Rashizun to align with 'The Rightly Guided' theme.",
+        "timestamp": "2026-05-05T08:28:00Z"
+      },
+      {
+        "type": "Architecture",
+        "details": "Integrated 7-Stage SDLC Lifecycle strategy from Gemini conversation (2026-05-05).",
+        "timestamp": "2026-05-05T08:30:00Z"
+      }
+    ]
+  },
+  "interactions": [],
+  "architectural_decisions": [
+    {
+      "id": "AD-001",
+      "decision": "Use Dockerfile.build for reproducible 2026-standard build environments.",
+      "rationale": "Ensures environment parity and isolates build dependencies from the host.",
+      "status": "Accepted"
+    }
+  ],
+  "agent_mcp_config": {
+    "enabled": true,
+    "servers": [
+      {
+        "name": "rashizun-core",
+        "type": "stdio",
+        "path": "./scripts/mcp-server.sh"
+      }
+    ]
+  }
+}
