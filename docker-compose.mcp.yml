@@ -13,7 +13,7 @@ services:
     environment:
       - RAG_ENGINE_URL=http://rag-engine:8000
     stdin_open: true
-    tty: true
+    tty: false
     networks:
       - rashizun-net
 

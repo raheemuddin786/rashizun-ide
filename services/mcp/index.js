@@ -45,9 +45,16 @@ server.setRequestHandler(ListToolsRequestSchema, async () => {
 
 // Call Tool
 server.setRequestHandler(CallToolRequestSchema, async (request) => {
-  try {
-    const ledger = JSON.parse(fs.readFileSync(LEDGER_PATH, "utf-8"));
+    if (!fs.existsSync(LEDGER_PATH)) {
+      throw new McpError(ErrorCode.InternalError, `Ledger file not found at ${LEDGER_PATH}`);
+    }
     
+    let ledger;
+    try {
+      ledger = JSON.parse(fs.readFileSync(LEDGER_PATH, "utf-8"));
+    } catch (e) {
+      throw new McpError(ErrorCode.InternalError, `Failed to parse ledger: ${e.message}`);
+    }
     switch (request.params.name) {
       case "get_project_summary": {
         const pkg = JSON.parse(fs.readFileSync("./package.json", "utf-8"));
