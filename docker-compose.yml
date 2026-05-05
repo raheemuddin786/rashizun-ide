@@ -8,7 +8,6 @@ services:
   rashizun-ide:
     build:
       context: .
-      dockerfile: Dockerfile.runtime
     container_name: rashizun-ide
     ports:
       - "8443:8443"
