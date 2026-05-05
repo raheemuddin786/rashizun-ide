@@ -1,5 +1,3 @@
-version: '3.8'
-
 services:
   # Self-MCP Server (Bridge between IDE and Agents)
   mcp-core-server:

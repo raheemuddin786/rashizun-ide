@@ -1,4 +1,5 @@
 #!/usr/bin/env bash
+set -euo pipefail
 
 # Rashizun MCP Server Bridge
 # This script bridges the host's stdio to the MCP server running in Docker.
