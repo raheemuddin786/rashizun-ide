@@ -1,0 +1,32 @@
+version: '3.8'
+
+include:
+  - path: docker-compose.ai.yml
+  - path: docker-compose.mcp.yml
+
+services:
+  rashizun-ide:
+    build:
+      context: .
+      dockerfile: Dockerfile.runtime
+    container_name: rashizun-ide
+    ports:
+      - "8443:8443"
+    volumes:
+      - ./workspace:/app/workspace
+      - ./.rashizun:/app/.rashizun
+      - ./data/lancedb:/app/data/lancedb
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=Etc/UTC
+      - RASHIZUN_MODE=WebOrchestrator
+    depends_on:
+      - rag-engine
+      - mcp-core-server
+    networks:
+      - rashizun-net
+
+networks:
+  rashizun-net:
+    driver: bridge

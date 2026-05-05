@@ -1,0 +1,29 @@
+version: '3.8'
+
+services:
+  # Self-MCP Server (Bridge between IDE and Agents)
+  mcp-core-server:
+    build:
+      context: ./services/mcp
+    container_name: rashizun-mcp-core
+    volumes:
+      - ./.rashizun/ledger.json:/app/ledger.json
+      - ./scripts:/app/scripts
+    environment:
+      - RAG_ENGINE_URL=http://rag-engine:8000
+    networks:
+      - rashizun-net
+
+  # Skill Registry (Custom MCP tools/agents)
+  skill-registry:
+    build:
+      context: ./services/skills
+    container_name: rashizun-skills
+    volumes:
+      - ./services/skills/repo:/app/skills
+    networks:
+      - rashizun-net
+
+networks:
+  rashizun-net:
+    external: true
