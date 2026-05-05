@@ -1,7 +1,7 @@
 const { Server } = require("@modelcontextprotocol/sdk/server/index.js");
 const { StdioServerTransport } = require("@modelcontextprotocol/sdk/server/stdio.js");
-const { 
-  CallToolRequestSchema, 
+const {
+  CallToolRequestSchema,
   ListToolsRequestSchema,
   ErrorCode,
   McpError
@@ -45,10 +45,11 @@ server.setRequestHandler(ListToolsRequestSchema, async () => {
 
 // Call Tool
 server.setRequestHandler(CallToolRequestSchema, async (request) => {
+  try {
     if (!fs.existsSync(LEDGER_PATH)) {
       throw new McpError(ErrorCode.InternalError, `Ledger file not found at ${LEDGER_PATH}`);
     }
-    
+
     let ledger;
     try {
       ledger = JSON.parse(fs.readFileSync(LEDGER_PATH, "utf-8"));
@@ -59,8 +60,8 @@ server.setRequestHandler(CallToolRequestSchema, async (request) => {
       case "get_project_summary": {
         const pkg = JSON.parse(fs.readFileSync("./package.json", "utf-8"));
         return {
-          content: [{ 
-            type: "text", 
+          content: [{
+            type: "text",
             text: `Project: ${ledger.name}\nDescription: ${pkg.description}\nCurrent Phase: ${ledger.sdlc_phase}\nCreated: ${ledger.created_at}`
           }]
         };
