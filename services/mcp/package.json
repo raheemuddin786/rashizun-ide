@@ -1,0 +1,9 @@
+{
+  "name": "rashizun-mcp-core",
+  "version": "1.0.0",
+  "description": "Core MCP server for Rashizun IDE",
+  "main": "index.js",
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "^1.0.0"
+  }
+}

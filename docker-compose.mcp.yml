@@ -8,9 +8,12 @@ services:
     container_name: rashizun-mcp-core
     volumes:
       - ./.rashizun/ledger.json:/app/ledger.json
+      - ./package.json:/app/package.json
       - ./scripts:/app/scripts
     environment:
       - RAG_ENGINE_URL=http://rag-engine:8000
+    stdin_open: true
+    tty: true
     networks:
       - rashizun-net
 
@@ -26,4 +29,4 @@ services:
 
 networks:
   rashizun-net:
-    external: true
+    driver: bridge

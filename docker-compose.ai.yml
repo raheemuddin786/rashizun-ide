@@ -37,4 +37,4 @@ services:
 
 networks:
   rashizun-net:
-    external: true
+    driver: bridge
