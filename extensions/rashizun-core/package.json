@@ -1,0 +1,112 @@
+{
+  "name": "rashizun-core",
+  "displayName": "Rashizun Core Orchestrator",
+  "description": "Core UI features for the Rashizun Development Orchestrator.",
+  "version": "1.0.0",
+  "publisher": "rashizun",
+  "engines": {
+    "vscode": "^1.70.0"
+  },
+  "categories": [
+    "Other"
+  ],
+  "activationEvents": [
+    "onView:rashizun-ledger",
+    "onView:rashizun-security"
+  ],
+  "main": "./extension.js",
+  "contributes": {
+    "viewsContainers": {
+      "activitybar": [
+        {
+          "id": "rashizun-lifecycle",
+          "title": "Rashizun Lifecycle",
+          "icon": "media/astrolabe.png"
+        }
+      ]
+    },
+    "views": {
+      "rashizun-lifecycle": [
+        {
+          "id": "rashizun-discovery",
+          "name": "1. Discovery",
+          "type": "webview"
+        },
+        {
+          "id": "rashizun-architecture",
+          "name": "2. Architecture",
+          "type": "webview"
+        },
+        {
+          "id": "rashizun-sprint",
+          "name": "3. Sprint Planning",
+          "type": "webview"
+        },
+        {
+          "id": "rashizun-development",
+          "name": "4. Development",
+          "type": "webview"
+        },
+        {
+          "id": "rashizun-testing",
+          "name": "5. Testing & Compliance",
+          "type": "webview"
+        },
+        {
+          "id": "rashizun-deployment",
+          "name": "6. Deployment",
+          "type": "webview"
+        },
+        {
+          "id": "rashizun-maintenance",
+          "name": "7. Maintenance & MLOps",
+          "type": "webview"
+        },
+        {
+          "id": "rashizun-ledger",
+          "name": "📜 Project Ledger",
+          "type": "webview"
+        },
+        {
+          "id": "rashizun-security",
+          "name": "🛡️ Security Center",
+          "type": "webview"
+        }
+      ]
+    },
+    "walkthroughs": [
+      {
+        "id": "rashizun-welcome",
+        "title": "Welcome to Rashizun IDE",
+        "description": "Get started with the Rightly Guided Development Orchestrator.",
+        "steps": [
+          {
+            "id": "intro",
+            "title": "The Rashizun Philosophy",
+            "description": "Rashizun is an AI-native Development Orchestrator designed for architectural governance and security. Follow the 7-stage lifecycle to build with guidance.",
+            "media": {
+              "image": "media/astrolabe.png",
+              "altText": "Rashizun Logo"
+            }
+          },
+          {
+            "id": "lifecycle",
+            "title": "The 7-Stage Lifecycle",
+            "description": "Use the Lifecycle Sidebar (Astrolabe icon) to move from Discovery to Maintenance. Each stage provides context for your AI interactions.",
+            "completionEvents": [
+              "onView:rashizun-lifecycle"
+            ]
+          },
+          {
+            "id": "ledger",
+            "title": "Project Ledger",
+            "description": "Every major decision is tracked in the Project Ledger. This ensures architectural provenance and auditability for your code.",
+            "completionEvents": [
+              "onView:rashizun-ledger"
+            ]
+          }
+        ]
+      }
+    ]
+  }
+}

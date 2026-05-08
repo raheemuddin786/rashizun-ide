@@ -73,6 +73,16 @@ if [[ -f resources/linux/debian/control.template ]]; then
   sed -i 's|VSCodium|Rashizun|g' resources/linux/debian/control.template
 fi
 
+# Inject Rashizun Core extension
+echo "Injecting Rashizun Core extension..."
+mkdir -p extensions/rashizun-core
+cp -r ../extensions/rashizun-core/* extensions/rashizun-core/
+
+# Register as built-in extension in product.json
+# Note: In Code-OSS, built-in extensions are usually handled by the build script, 
+# but we can explicitly add it to product.json if needed or just place it in the extensions folder.
+# VSCodium/Code-OSS picks up extensions in the extensions/ directory during the build.
+
 # Final branding touch
 echo "Rashizun adaptation complete."
 
