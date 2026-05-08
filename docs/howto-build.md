@@ -178,6 +178,11 @@ Quick example for ARM64:
 ./scripts/setup-docker.sh build linux/arm64
 ```
 
+Note: Host ports are mapped as follows:
+- IDE: 7243
+- RAG API: 7200
+- Skills: 7201
+
 ## <a id="build-snap"></a>Build Snap
 
 ```

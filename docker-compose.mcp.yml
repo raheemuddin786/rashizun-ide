@@ -11,7 +11,7 @@ services:
       - ./package.json:/app/package.json
       - ./scripts:/app/scripts
     environment:
-      - RAG_ENGINE_URL=http://rag-engine:8000
+      - RAG_ENGINE_URL=http://rag-engine:7200
     stdin_open: true
     tty: false
     networks:

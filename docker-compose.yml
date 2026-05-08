@@ -12,7 +12,7 @@ services:
         TARGETARCH: ${TARGETARCH:-amd64}
     container_name: rashizun-ide
     ports:
-      - "8443:8443"
+      - "7243:7243"
     volumes:
       - ./workspace:/app/workspace
       - ./.rashizun:/app/.rashizun

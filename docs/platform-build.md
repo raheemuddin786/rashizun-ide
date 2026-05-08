@@ -105,6 +105,35 @@ The platform build information has been added to:
 - `docs/platform-build.md` - This file
 - `docs/howto-build.md` - Will be updated to reference this platform-specific documentation
 
+## Port Mapping (72xx Prefix)
+
+All services have been migrated to use the **72xx port prefix** for external access:
+
+| Service | File | Internal Port | External Port |
+|---------|------|---------------|---------------|
+| IDE (rashizun-ide) | `docker-compose.yml` | 7243 | 7243 |
+| RAG API | `services/rag/Dockerfile` | 7200 | 7200 |
+| Skills API | `services/skills/Dockerfile` | 7201 | 7201 |
+
+### Firewall Rules (Ubuntu 22)
+
+To allow access to these ports from your private network:
+
+```bash
+# Check current firewall status
+sudo ufw status verbose
+
+# Allow ports from private network (adjust CIDR as needed)
+sudo ufw allow from 192.168.0.0/16 to any port 7243 proto tcp
+sudo ufw allow from 192.168.0.0/16 to any port 7200 proto tcp
+sudo ufw allow from 192.168.0.0/16 to any port 7201 proto tcp
+
+# Verify rules
+sudo ufw status numbered
+```
+
+> **Note:** Replace `192.168.0.0/16` with your actual private network CIDR (common ranges: `10.0.0.0/8`, `172.16.0.0/12`, `192.168.0.0/16`).
+
 ## CI/CD Integration
 
 Continuous integration pipelines should iterate through the desired platforms and invoke the build script for each:
