@@ -1,4 +1,3 @@
-version: '3.8'
 
 services:
   # RAG Indexing and Retrieval Service
@@ -8,6 +7,7 @@ services:
       args:
         TARGETARCH: ${TARGETARCH:-amd64}
     container_name: rashizun-rag
+    command: ["uvicorn", "main:app", "--host", "0.0.0.0", "--port", "7200"]
     volumes:
       - ./data/lancedb:/app/data
       - ./workspace:/app/workspace
