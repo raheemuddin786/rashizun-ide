@@ -1,5 +1,8 @@
 FROM python:3.11-slim
 
+# Architecture-neutral service
+ARG TARGETARCH
+
 WORKDIR /app
 
 RUN apt-get update && apt-get install -y \

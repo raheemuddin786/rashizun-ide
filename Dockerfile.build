@@ -1,7 +1,9 @@
 # Use a stable Ubuntu base for 2026 standards
+# This Dockerfile is platform-agnostic and uses dynamic TARGETARCH.
 FROM ubuntu:24.04
 
 # Prevent interactive prompts during build
+ARG TARGETARCH
 ENV DEBIAN_FRONTEND=noninteractive
 
 # Install core build dependencies for Code-OSS/VSCodium

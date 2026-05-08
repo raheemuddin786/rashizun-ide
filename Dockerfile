@@ -1,6 +1,13 @@
 # --- BUILD STAGE ---
 # Standardizing on Node 22-Bookworm (Debian 12 Stable - 2026 Ready)
+# This Dockerfile is platform-agnostic and uses dynamic TARGETARCH mapping.
+# VSCODE_ARCH mapping: amd64 -> x64, arm64 -> arm64, arm -> armhf.
+# Cross-compilation tools are avoided in favor of native multi-arch builds.
 FROM node:22-bookworm AS builder
+
+# 0. Build Arguments (Dynamic based on build environment)
+ARG TARGETARCH
+ARG VSCODE_QUALITY=stable
 
 ENV DEBIAN_FRONTEND=noninteractive
 ENV NODE_OPTIONS="--max-old-space-size=12288"
@@ -17,7 +24,8 @@ RUN apt-get update && apt-get install -y \
     libsecret-1-dev libx11-dev libxkbfile-dev libkrb5-dev pkg-config unzip jq \
     fakeroot rpm dpkg-dev libgl1-mesa-dev libgbm-dev libvulkan-dev spirv-tools \
     libxcb1-dev libxcomposite-dev libxdamage-dev libxfixes-dev libnss3-dev \
-    libatk1.0-dev libcups2-dev libdrm-dev && rm -rf /var/lib/apt/lists/*
+    libatk1.0-dev libcups2-dev libdrm-dev libssl-dev \
+    && rm -rf /var/lib/apt/lists/*
 
 # 2. Install Latest Stable Rust (Supports Edition 2024)
 RUN curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y
@@ -42,16 +50,22 @@ RUN mkdir -p .rashizun/shadow-build && chmod -R 777 .rashizun/shadow-build
 RUN sed -i 's|node build/npm/preinstall.ts|npx ts-node --compiler-options "{\\"module\\":\\"commonjs\\"}" build/npm/preinstall.ts|g' prepare_vscode.sh && \
     sed -i 's|node build/lib/policies/policyGenerator.ts|npx ts-node --compiler-options "{\\"module\\":\\"commonjs\\"}" build/lib/policies/policyGenerator.ts|g' build.sh
 
-# 8. SURGICAL BOOTSTRAP & INCREMENTAL BUILD
-ARG TARGET_ARCH=arm64
-ARG VSCODE_QUALITY=stable
-ENV VSCODE_ARCH=${TARGET_ARCH}
-ENV VSCODE_QUALITY=${VSCODE_QUALITY}
+# 8. ARCHITECTURE MAPPING & BUILD
+RUN case "${TARGETARCH}" in \
+      "amd64") echo "x64" > /tmp/vscode_arch ;; \
+      "arm64") echo "arm64" > /tmp/vscode_arch ;; \
+      "arm")   echo "armhf" > /tmp/vscode_arch ;; \
+      *)       echo "${TARGETARCH}" > /tmp/vscode_arch ;; \
+    esac
 
-RUN ./get_repo.sh && \
+RUN export VSCODE_ARCH=$(cat /tmp/vscode_arch) && \
+    export VSCODE_QUALITY=${VSCODE_QUALITY} && \
+    ./get_repo.sh && \
     cd vscode/build/npm/gyp && npm install && \
     cd /rashizun && \
-    ./build.sh --incremental
+    ./build.sh --incremental && \
+    # Standardize output for the next stage
+    mv /rashizun/vscode-reh-web-linux-${VSCODE_ARCH} /rashizun/dist
 
 # --- RUNTIME STAGE ---
 FROM node:22-bookworm-slim
@@ -63,8 +77,8 @@ RUN apt-get update && apt-get install -y \
 
 WORKDIR /app
 
-ARG TARGET_ARCH=arm64
-COPY --from=builder /rashizun/vscode-reh-web-linux-${TARGET_ARCH} /app
+# Copy the standardized distribution from the builder
+COPY --from=builder /rashizun/dist /app
 
 RUN mkdir -p /app/workspace /app/.rashizun /app/data/lancedb
 
