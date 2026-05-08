@@ -1,3 +1,5 @@
+![Rashizun Logo](assets/logo.png)
+
 # 🛡️ Rashizun IDE — Feature Dashboard
 
 > **The Rightly Guided Development Orchestrator**
@@ -12,6 +14,7 @@ This dashboard provides a central view of the IDE's capabilities, patch status, 
 |---------|--------|-------------|
 | **Multi-Arch Build** | ✅ Stable | Support for amd64, arm64, riscv64, loong64. |
 | **Unified Port System**| ✅ Active | All services running on standardized `72xx` ports. |
+| **Security Center** | 🛡️ Active | Integrated vulnerability scanning and audit reports. |
 | **AI RAG Engine** | 🟢 Online | Retrieval-Augmented Generation for code intelligence. |
 | **Skills Registry** | 🟢 Online | Custom AI tools and agents integration. |
 | **Project Ledger** | 🔒 Active | Immutable architectural decisions tracked in `.rashizun/ledger.json`. |
@@ -90,6 +93,7 @@ This dashboard provides a central view of the IDE's capabilities, patch status, 
 ## ⚙️ System Actions
 
 - [🔄 Refresh Dashboard](command:workbench.action.terminal.sendSequence?{"text":"./scripts/update-dashboard.sh\n"})
+- [🛡️ Run Security Audit](command:workbench.action.terminal.sendSequence?{"text":"./scripts/security-audit.sh\n"})
 - [📋 View IDE Logs](command:workbench.action.terminal.sendSequence?{"text":"./scripts/setup-docker.sh logs\n"})
 - [🚀 Rebuild Stack](command:workbench.action.terminal.sendSequence?{"text":"./scripts/setup-docker.sh build\n"})
 
@@ -102,6 +106,7 @@ This dashboard provides a central view of the IDE's capabilities, patch status, 
 ---
 
 ## 📚 Documentation Links
+- [Onboarding Guide](docs/onboarding.md)
 - [Release Notes](release_notes.md)
 - [Quick Start Guide](docs/quick-start-guide.md)
 - [Build Documentation](docs/build-docs.md)

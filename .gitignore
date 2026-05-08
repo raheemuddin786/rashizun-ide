@@ -1,22 +1,41 @@
-vscode*
-VS*/*
-VSCode*
-VSCodium*
-.DS_Store
-*.env
-assets/
-build/linux/appimage/out
-build/linux/appimage/pkg2appimage.AppDir
-build/linux/appimage/pkg2appimage-*.AppImage
-build/linux/appimage/pkg2appimage.AppImage
-build/linux/appimage/squashfs-root
-build/linux/appimage/VSCodium
-build/windows/msi/releasedir
-build/windows/msi/Files*.wxs
-build/windows/msi/Files*.wixobj
-sourcemaps/
-stores/snapcraft/insider/*.snap
-stores/snapcraft/stable/*.snap
-font-size/node_modules/
-font-size/generate-css.js
-build_monitor.log
+# VS Code
+.vscode/*
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
+*.code-workspace
+
+# Build artifacts
+vscode/
+out/
+build-artifacts/
+*.tar.gz
+*.deb
+*.rpm
+*.dmg
+*.exe
+
+# Docker
+.docker
+.docker-compose.local.yml
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+venv/
+.env
+
+# Node
+node_modules/
+npm-debug.log*
+
+# Rashizun Data
+data/
+.rashizun/*.lock
+
+# Logs
+logs/
+*.log
+SECURITY_AUDIT.md

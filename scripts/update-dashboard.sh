@@ -32,11 +32,12 @@ done
 # System Actions
 SYSTEM_ACTIONS="## ⚙️ System Actions\n\n"
 SYSTEM_ACTIONS="${SYSTEM_ACTIONS}- [🔄 Refresh Dashboard](command:workbench.action.terminal.sendSequence?{\"text\":\"./scripts/update-dashboard.sh\\\\n\"})\n"
+SYSTEM_ACTIONS="${SYSTEM_ACTIONS}- [🛡️ Run Security Audit](command:workbench.action.terminal.sendSequence?{\"text\":\"./scripts/security-audit.sh\\\\n\"})\n"
 SYSTEM_ACTIONS="${SYSTEM_ACTIONS}- [📋 View IDE Logs](command:workbench.action.terminal.sendSequence?{\"text\":\"./scripts/setup-docker.sh logs\\\\n\"})\n"
 SYSTEM_ACTIONS="${SYSTEM_ACTIONS}- [🚀 Rebuild Stack](command:workbench.action.terminal.sendSequence?{\"text\":\"./scripts/setup-docker.sh build\\\\n\"})\n"
 
 # Premium banner
-BANNER="# 🛡️ Rashizun IDE — Feature Dashboard\n\n> **The Rightly Guided Development Orchestrator**\n\n---\n"
+BANNER="![Rashizun Logo](assets/logo.png)\n\n# 🛡️ Rashizun IDE — Feature Dashboard\n\n> **The Rightly Guided Development Orchestrator**\n\n---\n"
 
 # Replace sections by reconstructing the file
 TEMP_FILE=$(mktemp)
@@ -54,6 +55,7 @@ This dashboard provides a central view of the IDE's capabilities, patch status, 
 |---------|--------|-------------|
 | **Multi-Arch Build** | ✅ Stable | Support for amd64, arm64, riscv64, loong64. |
 | **Unified Port System**| ✅ Active | All services running on standardized \`72xx\` ports. |
+| **Security Center** | 🛡️ Active | Integrated vulnerability scanning and audit reports. |
 | **AI RAG Engine** | 🟢 Online | Retrieval-Augmented Generation for code intelligence. |
 | **Skills Registry** | 🟢 Online | Custom AI tools and agents integration. |
 | **Project Ledger** | 🔒 Active | Immutable architectural decisions tracked in \`.rashizun/ledger.json\`. |
@@ -80,6 +82,7 @@ cat <<EOF >> "${TEMP_FILE}"
 ---
 
 ## 📚 Documentation Links
+- [Onboarding Guide](docs/onboarding.md)
 - [Release Notes](release_notes.md)
 - [Quick Start Guide](docs/quick-start-guide.md)
 - [Build Documentation](docs/build-docs.md)
