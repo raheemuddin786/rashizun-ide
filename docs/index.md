@@ -3,6 +3,7 @@
 ## Table of Contents
 
 - [Getting Started with VSCodium](https://github.com/VSCodium/vscodium/blob/master/docs/getting-started.md)
+  - [Quick Start Guide](quick-start-guide.md)
   - [Installation](https://github.com/VSCodium/vscodium/blob/master/docs/getting-started.md#installation)
   - [First Steps](https://github.com/VSCodium/vscodium/blob/master/docs/getting-started.md#first-steps)
   - [Basic Usage](https://github.com/VSCodium/vscodium/blob/master/docs/getting-started.md#basic-usage)
