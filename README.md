@@ -13,6 +13,11 @@ Rashizun is an AI-native Development Orchestrator built as a telemetry-free "Cle
 - **Privacy-First**: Zero telemetry, proprietary Microsoft services stripped, and local-first AI stack.
 
 ## Documentation
+- [Feature Dashboard](DASHBOARD.md) 🚀
+- [Release Notes](release_notes.md)
+- [Quick Start Guide](docs/quick-start-guide.md)
+- [Build System Documentation](docs/build-docs.md)
+- [Platform-Specific Build Guide](docs/platform-build.md)
 - [Master Specification](docs/master_specification.md)
 - [SDLC & User Scenarios](docs/sdlc_reference.md)
 - [Technical Internals](docs/technical_internals.md)

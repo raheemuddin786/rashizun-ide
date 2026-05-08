@@ -1,4 +1,21 @@
-update vscode to [@@MS_TAG@@](@@MS_URL@@)
+# Release Notes
+
+## [v1.0.0] - 2024-05-08
+
+### Build System Enhancements
+- **Multi-Architecture Support**: Native support for `amd64`, `arm64`, `riscv64`, and `loong64`.
+- **Platform-Agnostic Docker Pipeline**: Refactored Dockerfiles to use dynamic `TARGETARCH` resolution.
+- **Port Standardization**: Unified all service ports to the `72xx` range (IDE: 7243, RAG: 7200, Skills: 7201).
+
+### UI & UX Improvements
+- **Standardized Branding**: Integrated Rashizun branding across the IDE.
+- **Optimized Remote Host**: Enhanced performance for the Remote Extension Host (REH) on Linux.
+
+### Critical Patches
+- [00-build-update-electron.patch](patches/00-build-update-electron.patch): Fixes Electron dependency version mismatch during build.
+- [01-update-product-json.patch](patches/01-update-product-json.patch): Customizes IDE metadata and branding.
+
+---
 
 @@RELEASE_NOTES@@
 

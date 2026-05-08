@@ -29,6 +29,20 @@
       "decision": "Use Dockerfile.build for reproducible 2026-standard build environments.",
       "rationale": "Ensures environment parity and isolates build dependencies from the host.",
       "status": "Accepted"
+    },
+    {
+      "id": "AD-002",
+      "decision": "Standardize all service ports to 72xx prefix.",
+      "rationale": "Avoids conflicts with common ports and provides a unified Rashizun namespace.",
+      "status": "Accepted",
+      "timestamp": "2026-05-08T22:30:00Z"
+    },
+    {
+      "id": "AD-003",
+      "decision": "Transition to platform-agnostic, multi-arch Docker builds via TARGETARCH.",
+      "rationale": "Enables native builds on arm64/amd64/riscv64 without complex cross-compilation toolchains.",
+      "status": "Accepted",
+      "timestamp": "2026-05-08T21:45:00Z"
     }
   ],
   "agent_mcp_config": {
