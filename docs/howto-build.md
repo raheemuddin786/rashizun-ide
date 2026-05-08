@@ -10,6 +10,7 @@
   - [Windows](#dependencies-windows)
 - [Build for Development](#build-dev)
 - [Build for CI/Downstream](#build-ci)
+- [Platform-Specific Builds (Docker)](#platform-builds-docker)
 - [Build Snap](#build-snap)
 - [Patch Update Process](#patch-update-process)
   - [Semi-Automated](#patch-update-process-semiauto)
@@ -167,6 +168,15 @@ To go further, you should look at how we build it:
 - Windows: https://github.com/VSCodium/vscodium/blob/master/.github/workflows/stable-windows.yml
 
 The `./dev/build.sh` script is for development purpose and must be avoided for a packaging purpose.
+
+## <a id="platform-builds-docker"></a>Platform-Specific Builds (Docker)
+
+For detailed instructions on building the Rashizun IDE for different architectures (amd64, arm64, etc.) using Docker, please refer to the [Platform-Specific Build Documentation](platform-build.md).
+
+Quick example for ARM64:
+```bash
+./scripts/setup-docker.sh build linux/arm64
+```
 
 ## <a id="build-snap"></a>Build Snap
 
