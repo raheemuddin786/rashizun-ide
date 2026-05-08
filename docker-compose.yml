@@ -8,6 +8,8 @@ services:
   rashizun-ide:
     build:
       context: .
+      args:
+        TARGETARCH: ${TARGETARCH:-amd64}
     container_name: rashizun-ide
     ports:
       - "8443:8443"

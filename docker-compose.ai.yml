@@ -5,6 +5,8 @@ services:
   rag-engine:
     build:
       context: ./services/rag
+      args:
+        TARGETARCH: ${TARGETARCH:-amd64}
     container_name: rashizun-rag
     volumes:
       - ./data/lancedb:/app/data

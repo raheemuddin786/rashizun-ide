@@ -3,6 +3,8 @@ services:
   mcp-core-server:
     build:
       context: ./services/mcp
+      args:
+        TARGETARCH: ${TARGETARCH:-amd64}
     container_name: rashizun-mcp-core
     volumes:
       - ./.rashizun/ledger.json:/app/ledger.json
@@ -19,6 +21,8 @@ services:
   skill-registry:
     build:
       context: ./services/skills
+      args:
+        TARGETARCH: ${TARGETARCH:-amd64}
     container_name: rashizun-skills
     volumes:
       - ./services/skills/repo:/app/skills
