@@ -11,9 +11,15 @@ services:
       - ./package.json:/app/package.json
       - ./scripts:/app/scripts
     environment:
-      - RAG_ENGINE_URL=http://rag-engine:7200
-    stdin_open: true
-    tty: false
+      - RAG_SERVICE_URL=http://rag-engine:7200
+      - SKILLS_SERVICE_URL=http://skill-registry:7201
+    ports:
+      - "7100:7100"
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:7100/health"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
     networks:
       - rashizun-net
 
@@ -27,6 +33,11 @@ services:
     command: ["uvicorn", "main:app", "--host", "0.0.0.0", "--port", "7201"]
     volumes:
       - ./services/skills/repo:/app/skills
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:7201/healthz"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
     networks:
       - rashizun-net
 

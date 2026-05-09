@@ -11,6 +11,7 @@
     "Other"
   ],
   "activationEvents": [
+    "onStartupFinished",
     "onView:rashizun-ledger",
     "onView:rashizun-security",
     "onView:rashizun-rag"

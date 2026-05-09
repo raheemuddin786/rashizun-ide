@@ -3,6 +3,12 @@
 
 set -e
 
+# Prerequisite check: jq is mandatory for JSON processing
+if ! command -v jq &> /dev/null; then
+    echo "ERROR: 'jq' is not installed. This is mandatory for Rashizun branding."
+    exit 1
+fi
+
 # Run the base VSCodium preparation
 . ./prepare_vscode.sh
 

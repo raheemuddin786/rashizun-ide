@@ -11,8 +11,9 @@ services:
         TARGETARCH: ${TARGETARCH:-amd64}
     container_name: rashizun-ide
     command: ["./bin/rashizun-server", "--host", "0.0.0.0", "--port", "7243", "--connection-token", "rashizun-token"]
-    ports:
-      - "7243:7243"
+    # Internal port only, public access is via proxy
+    expose:
+      - "7243"
     volumes:
       - ./workspace:/app/workspace
       - ./.rashizun:/app/.rashizun
@@ -25,6 +26,20 @@ services:
     depends_on:
       - rag-engine
       - mcp-core-server
+    networks:
+      - rashizun-net
+
+  # Protocol 5.1/5.2: Secure Proxy & Auth Gateway
+  rashizun-proxy:
+    image: nginx:alpine
+    container_name: rashizun-proxy
+    volumes:
+      - ./services/proxy/nginx.conf:/etc/nginx/nginx.conf:ro
+      - ./services/proxy/.htpasswd:/etc/nginx/.htpasswd:ro
+    ports:
+      - "8080:80"
+    depends_on:
+      - rashizun-ide
     networks:
       - rashizun-net
 

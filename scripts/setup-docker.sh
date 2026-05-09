@@ -15,9 +15,10 @@ case $COMMAND in
     ;;
   "build")
     PLATFORM=${2:-linux/amd64}
+    SERVICE=${3}
     ARCH=$(echo $PLATFORM | cut -d'/' -f2)
-    echo "Building Rashizun Stack for $PLATFORM ($ARCH)..."
-    TARGETARCH=$ARCH docker compose build
+    echo "Building Rashizun Service: ${SERVICE:-ALL} for $PLATFORM ($ARCH)..."
+    TARGETARCH=$ARCH docker compose build $SERVICE
     ;;
   "logs")
     docker compose logs -f

@@ -27,3 +27,29 @@ async def list_skills():
     
     skills = [f for f in os.listdir(skills_dir) if f.endswith(".py") or os.path.isdir(os.path.join(skills_dir, f))]
     return {"skills": skills}
+
+@app.post("/execute")
+async def execute_skill(payload: dict):
+    skill_name = payload.get("skill")
+    args = payload.get("arguments", {})
+    
+    skills_dir = "/app/skills"
+    skill_path = os.path.join(skills_dir, f"{skill_name}.py")
+    
+    if not os.path.exists(skill_path):
+        return {"error": f"Skill {skill_name} not found"}
+    
+    try:
+        # Dynamic loading logic
+        spec = importlib.util.spec_from_file_location(skill_name, skill_path)
+        module = importlib.util.module_from_spec(spec)
+        spec.loader.exec_module(module)
+        
+        # Assume each skill has a 'run' function
+        if hasattr(module, "run"):
+            result = await module.run(args) if os.path.iscoroutinefunction(module.run) else module.run(args)
+            return {"status": "success", "output": result}
+        else:
+            return {"error": "Skill missing 'run' function"}
+    except Exception as e:
+        return {"error": str(e)}

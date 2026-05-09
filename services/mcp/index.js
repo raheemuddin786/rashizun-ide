@@ -1,5 +1,5 @@
 const { Server } = require("@modelcontextprotocol/sdk/server/index.js");
-const { StdioServerTransport } = require("@modelcontextprotocol/sdk/server/stdio.js");
+const { SSEServerTransport } = require("@modelcontextprotocol/sdk/server/sse.js");
 const {
   CallToolRequestSchema,
   ListToolsRequestSchema,
@@ -8,9 +8,14 @@ const {
 } = require("@modelcontextprotocol/sdk/types.js");
 const fs = require("fs");
 const path = require("path");
+const express = require("express");
 
+// Twelve-Factor Config
 const LEDGER_PATH = process.env.LEDGER_PATH || path.join(__dirname, "../../.rashizun/ledger.json");
 const ROOT_PACKAGE_PATH = path.join(__dirname, "../../package.json");
+const RAG_SERVICE_URL = process.env.RAG_SERVICE_URL || "http://rag-engine:7200";
+const SKILLS_SERVICE_URL = process.env.SKILLS_SERVICE_URL || "http://skill-registry:7201";
+const PORT = process.env.PORT || 7100;
 
 const server = new Server({
   name: "rashizun-mcp-core",
@@ -70,8 +75,25 @@ server.setRequestHandler(ListToolsRequestSchema, async () => {
       },
       {
         name: "health_check",
-        description: "Performs a system health check",
+        description: "Performs a system health check across all microservices",
         inputSchema: { type: "object", properties: {} }
+      },
+      {
+        name: "list_skills",
+        description: "Lists all available automation skills from the registry",
+        inputSchema: { type: "object", properties: {} }
+      },
+      {
+        name: "run_skill",
+        description: "Executes a specific automation skill",
+        inputSchema: {
+          type: "object",
+          properties: {
+            skill_name: { type: "string", description: "Name of the skill to execute" },
+            args: { type: "object", description: "Arguments for the skill" }
+          },
+          required: ["skill_name"]
+        }
       }
     ]
   };
@@ -95,10 +117,22 @@ server.setRequestHandler(CallToolRequestSchema, async (request) => {
       case "get_project_summary": {
         const ledger = safeReadJson(LEDGER_PATH);
         const pkg = safeReadJson(ROOT_PACKAGE_PATH);
+        
+        const provenance = ledger.architectural_provenance || {};
+        const adaptations = (provenance.adaptations || []).map(a => `- [${a.type}] ${a.details}`).join('\n');
+        
         return {
           content: [{
             type: "text",
-            text: `Project: ${ledger.name}\nDescription: ${pkg.description}\nCurrent Phase: ${ledger.sdlc_phase}\nCreated: ${ledger.created_at}`
+            text: `Project: ${ledger.name}\n` +
+                  `Description: ${pkg.description}\n` +
+                  `Current Phase: ${ledger.sdlc_phase}\n` +
+                  `Created: ${ledger.created_at}\n` +
+                  `--- Architectural Memory (Protocol 2.2) ---\n` +
+                  `Initial Fork: ${provenance.initial_fork?.source || 'N/A'}\n` +
+                  `Adaptations:\n${adaptations || 'No historical logs found.'}\n` +
+                  `Adaptation Deltas: ${ledger.adaptation_deltas || 'None recorded.'}\n` +
+                  `Prompt History: ${ledger.prompt_history?.length || 0} interactions stored.`
           }]
         };
       }
@@ -116,30 +150,92 @@ server.setRequestHandler(CallToolRequestSchema, async (request) => {
         };
       }
       case "shadow_build": {
-        return {
-          content: [{ 
-            type: "text", 
-            text: "🛡️ Shadow Build Initiated...\n[1/3] Validating Syntax: ✅\n[2/3] Running Unit Tests: ✅\n[3/3] Integrity Check: ✅\n\nResult: Change sets are structurally sound and safe to apply."
-          }]
-        };
+        const { execSync } = require("child_process");
+        const scriptPath = path.join(__dirname, "../../scripts/shadow-build.sh");
+        try {
+          const output = execSync(scriptPath, { encoding: "utf8" });
+          return {
+            content: [{ type: "text", text: output }]
+          };
+        } catch (e) {
+          return {
+            content: [{ type: "text", text: `❌ Shadow Build Failed:\n${e.stdout || e.message}` }],
+            isError: true
+          };
+        }
       }
       case "index_knowledge": {
         const { content, metadata } = request.params.arguments;
-        // In production, this would call the RAG service
+        
+        // Security Guardrail: Validate inputs
+        if (!content || typeof content !== 'string' || content.length < 5) {
+            throw new McpError(ErrorCode.InvalidParams, "Content must be a non-empty string (min 5 chars)");
+        }
+        if (metadata && typeof metadata !== 'object') {
+            throw new McpError(ErrorCode.InvalidParams, "Metadata must be a JSON object");
+        }
+
+        const response = await fetch(`${RAG_SERVICE_URL}/index`, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ content, metadata: metadata || {} })
+        });
+        const result = await response.json();
         return {
-          content: [{ type: "text", text: `Successfully indexed: ${content.substring(0, 50)}...` }]
+          content: [{ type: "text", text: `RAG Service: ${result.message || "Indexed"}. Preview: ${result.content_preview || ""}` }]
         };
       }
       case "search_knowledge": {
         const { query } = request.params.arguments;
-        // Mocked response for RAG search
+        const response = await fetch(`${RAG_SERVICE_URL}/search?query=${encodeURIComponent(query)}`);
+        const result = await response.json();
         return {
-          content: [{ type: "text", text: `Search results for "${query}": Found 0 relevant snippets (Mock Engine).` }]
+          content: [{ 
+            type: "text", 
+            text: `RAG Service: Found ${result.results?.length || 0} relevant snippets for "${query}".`
+          }]
+        };
+      }
+      case "list_skills": {
+        const response = await fetch(`${SKILLS_SERVICE_URL}/skills`);
+        const result = await response.json();
+        return {
+          content: [{ type: "text", text: `Available Skills: ${result.skills?.join(", ") || "None"}` }]
+        };
+      }
+      case "run_skill": {
+        const { skill_name, args } = request.params.arguments;
+        const response = await fetch(`${SKILLS_SERVICE_URL}/execute`, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ skill: skill_name, arguments: args })
+        });
+        const result = await response.json();
+        return {
+          content: [{ type: "text", text: `Skill Result [${skill_name}]: ${result.output || "Completed"}` }]
         };
       }
       case "health_check": {
+        const services = [
+            { name: "RAG Engine", url: `${RAG_SERVICE_URL}/healthz` },
+            { name: "Skill Registry", url: `${SKILLS_SERVICE_URL}/healthz` }
+        ];
+        
+        const results = await Promise.all(services.map(async s => {
+            try {
+                const res = await fetch(s.url, { signal: AbortSignal.timeout(2000) });
+                return { name: s.name, status: res.ok ? "Healthy" : "Unhealthy" };
+            } catch (e) {
+                return { name: s.name, status: "Offline" };
+            }
+        }));
+
+        const summary = results.map(r => `${r.name}: ${r.status}`).join("\n");
+        const allHealthy = results.every(r => r.status === "Healthy");
+
         return {
-          content: [{ type: "text", text: "Rashizun MCP Core: Healthy" }]
+          content: [{ type: "text", text: summary }],
+          status: allHealthy ? "healthy" : "unhealthy"
         };
       }
       default:
@@ -153,9 +249,35 @@ server.setRequestHandler(CallToolRequestSchema, async (request) => {
   }
 });
 
-async function main() {
-  const transport = new StdioServerTransport();
-  await server.connect(transport);
-}
+const app = express();
+app.use(express.json());
+let transport;
 
-main().catch(console.error);
+app.get("/health", (req, res) => {
+  res.status(200).json({ status: "healthy", service: "rashizun-mcp-core" });
+});
+
+app.get("/sse", async (req, res) => {
+  transport = new SSEServerTransport("/messages", res);
+  await server.connect(transport);
+});
+
+app.post("/messages", async (req, res) => {
+  await transport.handlePostMessage(req, res);
+});
+
+// REST Bridge for IDE Extension
+app.post("/call", async (req, res) => {
+    const { name, arguments: args } = req.body;
+    try {
+        const result = await server.executeTool({ name, arguments: args });
+        res.json(result);
+    } catch (e) {
+        res.status(500).json({ error: e.message });
+    }
+});
+
+app.listen(PORT, () => {
+  console.log(`MCP SSE Server listening on port ${PORT}`);
+});
+

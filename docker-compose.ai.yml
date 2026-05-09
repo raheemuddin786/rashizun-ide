@@ -9,11 +9,12 @@ services:
     container_name: rashizun-rag
     command: ["uvicorn", "main:app", "--host", "0.0.0.0", "--port", "7200"]
     volumes:
-      - ./data/lancedb:/app/data
+      - ./data/chroma:/app/data
       - ./workspace:/app/workspace
     environment:
       - OLLAMA_HOST=http://host.docker.internal:11434
-      - LANCEDB_PATH=/app/data
+      - CHROMA_DB_PATH=/app/data
+      - ATEN_CPU_CAPABILITY=default
     extra_hosts:
       - "host.docker.internal:host-gateway"
     networks:

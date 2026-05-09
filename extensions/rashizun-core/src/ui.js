@@ -37,7 +37,12 @@ function getStageHtml(stage, styleUri) {
         sprint: { title: "3. Sprint Planning", icon: "📅", desc: "Iterative roadmaps and workload estimation.", actions: ["Plan Sprint", "Assign Tasks"] },
         development: { title: "4. Development", icon: "💻", desc: "AI-assisted implementation and shadow builds.", actions: ["Ghost Text Settings", "Run Shadow Build"] },
         testing: { title: "5. Testing", icon: "🧪", desc: "Automated SAST/DAST and compliance checks.", actions: ["Run Tests", "Security Scan"] },
-        deployment: { title: "6. Deployment", icon: "🚀", desc: "Cloud-agnostic deployment via MCP skills.", actions: ["Deploy Staging", "Release Prod"] },
+        deployment: { 
+            title: "6. Deployment", 
+            icon: "🚀", 
+            desc: "Cloud-agnostic deployment via MCP skills.", 
+            actions: ["Deploy Staging", "Release Prod", "List Skills"] 
+        },
         maintenance: { title: "7. Maintenance", icon: "🛠️", desc: "Observability and automated retraining loops.", actions: ["View Logs", "Check Drift"] }
     };
 
@@ -58,6 +63,14 @@ function getStageHtml(stage, styleUri) {
         function onAction(action) {
             if (action === 'Run Shadow Build') {
                 vscode.postMessage({ command: 'runShadowBuild' });
+            } else if (action === 'List Skills') {
+                vscode.postMessage({ command: 'listSkills' });
+            } else if (action === 'Define MVP') {
+                vscode.postMessage({ command: 'defineMvp' });
+            } else if (action === 'Analyze Costs') {
+                vscode.postMessage({ command: 'analyzeCosts' });
+            } else if (action === 'Security Scan') {
+                vscode.postMessage({ command: 'securityScan' });
             }
         }`;
 
@@ -101,7 +114,7 @@ function getSecurityHtml(styleUri) {
             <button class="action-btn" onclick="runAudit()">Trigger Audit</button>
         </div>`;
 
-    const scripts = `function runAudit() { vscode.postMessage({ command: 'runAudit' }); }`;
+    const scripts = `function runAudit() { vscode.postMessage({ command: 'securityScan' }); }`;
 
     return getBaseHtml("SECURITY CENTER", body, styleUri, scripts);
 }
@@ -114,12 +127,17 @@ function getRagHtml(styleUri) {
             .result-item { padding: 8px; border-bottom: 1px solid rgba(255,255,255,0.05); }
             .result-title { font-weight: bold; font-size: 12px; color: var(--rashizun-accent); }
             .result-excerpt { font-size: 11px; opacity: 0.7; }
+            .health-row { display: flex; align-items: center; justify-content: space-between; font-size: 10px; margin-top: 10px; opacity: 0.8; }
+            .health-dot { width: 8px; height: 8px; border-radius: 50%; background: #50fa7b; margin-right: 5px; }
         </style>
         <div class="card" style="border-left: 4px solid var(--rashizun-accent);">
             <h2>Vector Store</h2>
             <div class="status-badge">CONNECTED</div>
             <div class="ledger-item">Engine: LanceDB / Tantivy</div>
-            <div class="ledger-item">Status: Synchronized</div>
+            <div class="health-row">
+                <span>RAG Service: <span id="ragStatus">Checking...</span></span>
+                <span class="health-dot" id="ragDot"></span>
+            </div>
             <button class="action-btn" onclick="indexKnowledge()">Index Workspace</button>
         </div>
         <div class="card">
@@ -138,18 +156,33 @@ function getRagHtml(styleUri) {
             if(query) vscode.postMessage({ command: 'searchKnowledge', payload: { query } });
         }
 
+        function checkHealth() {
+            vscode.postMessage({ command: 'checkHealth' });
+        }
+
         window.addEventListener('message', event => {
             const message = event.data;
             if (message.command === 'searchResult') {
                 const resultsContainer = document.getElementById('results');
-                resultsContainer.innerHTML = message.results.map(r => \`
-                    <div class="result-item">
-                        <div class="result-title">\${r.title}</div>
-                        <div class="result-excerpt">\${r.excerpt}</div>
-                    </div>
-                \`).join('');
+                resultsContainer.innerHTML = message.results.length > 0 
+                    ? message.results.map(r => \`
+                        <div class="result-item">
+                            <div class="result-title">\${r.title}</div>
+                            <div class="result-excerpt">\${r.excerpt}</div>
+                        </div>
+                    \`).join('')
+                    : '<div class="ledger-item">No results found.</div>';
+            } else if (message.command === 'healthResult') {
+                const status = document.getElementById('ragStatus');
+                const dot = document.getElementById('ragDot');
+                status.innerText = message.healthy ? 'Healthy' : 'Offline';
+                dot.style.background = message.healthy ? '#50fa7b' : '#ff5555';
             }
-        });`;
+        });
+
+        // Staggered health check to avoid startup IPC congestion
+        setTimeout(checkHealth, 2000);
+        setInterval(checkHealth, 30000);`;
 
     return getBaseHtml("RAG ENGINE EXPLORER", body, styleUri, scripts);
 }

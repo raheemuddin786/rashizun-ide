@@ -57,5 +57,27 @@ if [[ -f "package.json" ]]; then
     echo '```' >> "${REPORT_FILE}"
 fi
 
+# License & "Clean Room" Compliance
+echo "Verifying License Compliance..."
+echo "## ⚖️ License & Clean Room Compliance" >> "${REPORT_FILE}"
+echo '```' >> "${REPORT_FILE}"
+
+# Check for unauthorized copyright headers
+UNAUTHORIZED=$(grep -r "Microsoft" . --exclude-dir=node_modules --exclude-dir=.git | wc -l)
+if [[ $UNAUTHORIZED -gt 0 ]]; then
+    echo "⚠️ WARNING: detected ${UNAUTHORIZED} unauthorized corporate references. Potential Clean Room violation." >> "${REPORT_FILE}"
+else
+    echo "✅ Clean Room Protocol: No unauthorized copyright headers detected." >> "${REPORT_FILE}"
+fi
+
+# Check for GPL contamination
+GPL_DEPS=$(grep -i "GPL" package.json 2>/dev/null | wc -l)
+if [[ $GPL_DEPS -gt 0 ]]; then
+    echo "⚠️ WARNING: Potential GPL contamination in package.json." >> "${REPORT_FILE}"
+else
+    echo "✅ License Hygiene: No GPL-licensed dependencies found in core package." >> "${REPORT_FILE}"
+fi
+echo '```' >> "${REPORT_FILE}"
+
 echo "---" >> "${REPORT_FILE}"
 echo "Report saved to ${REPORT_FILE}"

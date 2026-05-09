@@ -49,8 +49,23 @@ A hidden file that acts as the project's permanent memory, storing:
 *   **Mixture of Agents (MoA)**: Automatically selects the most cost-effective model for sub-tasks (e.g., small local models for debugging vs. large models for architecture).
 
 ### 3.2 Contextual RAG & Memory
-*   **Semantic Fingerprinting**: Uses **Merkle trees** to provide a semantic map of file relationships, allowing agents to understand codebase structure without reading raw tokens.
-*   **Self-MCP & Skill Registry**: The IDE acts as its own MCP server, exposing state via STDIO (local) or HTTP (remote) to autonomous agents.
+- **AI RAG Engine**: Vector-based knowledge retrieval via LanceDB.
+- **MCP Core**: Standardized Model Context Protocol for tool-based orchestration.
+- **Health Monitoring**: Distributed health checks via `/healthz` endpoints and MCP `health_check` tools.
+
+## Service Map
+- **MCP Server**: Port 7100 (Stdio/SSE)
+- **RAG Service**: Port 7200 (REST)
+- **Skill Registry**: Port 7201 (REST)
+
+## Health Check Protocol
+All services must expose a `GET /healthz` endpoint returning `{"status": "healthy"}`. The MCP core provides a `health_check` tool that aggregates these statuses for the IDE UI.
+
+## RAG Engine Integration
+The IDE consumes the RAG engine through two primary MCP tools:
+1. `index_knowledge`: Accepts `content` and `metadata`.
+2. `search_knowledge`: Accepts a `query` string and returns ranked results.
+ acts as its own MCP server, exposing state via STDIO (local) or HTTP (remote) to autonomous agents.
 
 ### 3.3 Contextual RAG
 *   **Knowledge Base**: Local vector database (FAISS/LanceDB) for project-wide retrieval.

@@ -21,14 +21,30 @@ function safeReadJson(filePath) {
             return JSON.parse(fs.readFileSync(filePath, 'utf8'));
         }
     } catch (e) {
-        console.error(`Error reading JSON from ${filePath}:`, e);
+        Logger.error(`Failed to read JSON from ${filePath}`, e);
     }
     return null;
+}
+
+class Logger {
+    static info(message) {
+        console.log(`[Rashizun INFO] ${message}`);
+    }
+    static warn(message) {
+        console.warn(`[Rashizun WARN] ${message}`);
+    }
+    static error(message, error) {
+        console.error(`[Rashizun ERROR] ${message}`, error);
+        if (error?.message) {
+            vscode.window.showErrorMessage(`Rashizun Error: ${message} (${error.message})`);
+        }
+    }
 }
 
 module.exports = {
     getWorkspaceRoot,
     resolveScriptPath,
     sanitizeInput,
-    safeReadJson
+    safeReadJson,
+    Logger
 };
