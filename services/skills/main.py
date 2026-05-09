@@ -14,6 +14,7 @@ async def root():
     }
 
 @app.get("/health")
+@app.get("/healthz")
 async def health():
     return {"status": "healthy"}
 

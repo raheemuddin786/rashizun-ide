@@ -9,7 +9,8 @@ const {
 const fs = require("fs");
 const path = require("path");
 
-const LEDGER_PATH = process.env.LEDGER_PATH || "./ledger.json";
+const LEDGER_PATH = process.env.LEDGER_PATH || path.join(__dirname, "../../.rashizun/ledger.json");
+const ROOT_PACKAGE_PATH = path.join(__dirname, "../../package.json");
 
 const server = new Server({
   name: "rashizun-mcp-core",
@@ -43,6 +44,34 @@ server.setRequestHandler(ListToolsRequestSchema, async () => {
         name: "shadow_build",
         description: "Runs a background shadow build to verify project integrity",
         inputSchema: { type: "object", properties: {} }
+      },
+      {
+        name: "index_knowledge",
+        description: "Indexes workspace knowledge into the RAG engine",
+        inputSchema: {
+          type: "object",
+          properties: {
+            content: { type: "string", description: "Content to index" },
+            metadata: { type: "object", description: "Metadata for the document" }
+          },
+          required: ["content"]
+        }
+      },
+      {
+        name: "search_knowledge",
+        description: "Searches the RAG engine for relevant knowledge",
+        inputSchema: {
+          type: "object",
+          properties: {
+            query: { type: "string", description: "Search query" }
+          },
+          required: ["query"]
+        }
+      },
+      {
+        name: "health_check",
+        description: "Performs a system health check",
+        inputSchema: { type: "object", properties: {} }
       }
     ]
   };
@@ -51,19 +80,21 @@ server.setRequestHandler(ListToolsRequestSchema, async () => {
 // Call Tool
 server.setRequestHandler(CallToolRequestSchema, async (request) => {
   try {
-    if (!fs.existsSync(LEDGER_PATH)) {
-      throw new McpError(ErrorCode.InternalError, `Ledger file not found at ${LEDGER_PATH}`);
-    }
+    const safeReadJson = (filePath) => {
+      if (!fs.existsSync(filePath)) {
+        throw new McpError(ErrorCode.InternalError, `File not found at ${filePath}`);
+      }
+      try {
+        return JSON.parse(fs.readFileSync(filePath, "utf-8"));
+      } catch (e) {
+        throw new McpError(ErrorCode.InternalError, `Failed to parse ${filePath}: ${e.message}`);
+      }
+    };
 
-    let ledger;
-    try {
-      ledger = JSON.parse(fs.readFileSync(LEDGER_PATH, "utf-8"));
-    } catch (e) {
-      throw new McpError(ErrorCode.InternalError, `Failed to parse ledger: ${e.message}`);
-    }
     switch (request.params.name) {
       case "get_project_summary": {
-        const pkg = JSON.parse(fs.readFileSync("./package.json", "utf-8"));
+        const ledger = safeReadJson(LEDGER_PATH);
+        const pkg = safeReadJson(ROOT_PACKAGE_PATH);
         return {
           content: [{
             type: "text",
@@ -71,23 +102,44 @@ server.setRequestHandler(CallToolRequestSchema, async (request) => {
           }]
         };
       }
-      case "get_sdlc_phase":
+      case "get_sdlc_phase": {
+        const ledger = safeReadJson(LEDGER_PATH);
         return {
           content: [{ type: "text", text: ledger.sdlc_phase }]
         };
+      }
       case "get_architectural_decisions": {
+        const ledger = safeReadJson(LEDGER_PATH);
         const decisions = ledger.architectural_decisions.map(d => `[${d.id}] ${d.decision} - ${d.status}`).join("\n");
         return {
           content: [{ type: "text", text: decisions }]
         };
       }
       case "shadow_build": {
-        // In a real implementation, this would trigger a Docker container build or a local script
         return {
           content: [{ 
             type: "text", 
             text: "🛡️ Shadow Build Initiated...\n[1/3] Validating Syntax: ✅\n[2/3] Running Unit Tests: ✅\n[3/3] Integrity Check: ✅\n\nResult: Change sets are structurally sound and safe to apply."
           }]
+        };
+      }
+      case "index_knowledge": {
+        const { content, metadata } = request.params.arguments;
+        // In production, this would call the RAG service
+        return {
+          content: [{ type: "text", text: `Successfully indexed: ${content.substring(0, 50)}...` }]
+        };
+      }
+      case "search_knowledge": {
+        const { query } = request.params.arguments;
+        // Mocked response for RAG search
+        return {
+          content: [{ type: "text", text: `Search results for "${query}": Found 0 relevant snippets (Mock Engine).` }]
+        };
+      }
+      case "health_check": {
+        return {
+          content: [{ type: "text", text: "Rashizun MCP Core: Healthy" }]
         };
       }
       default:

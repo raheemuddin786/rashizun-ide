@@ -1,11 +1,10 @@
 FROM python:3.11-slim
 
 # Architecture-neutral service
-ARG TARGETARCH
-
 WORKDIR /app
 
-RUN pip install --no-cache-dir fastapi uvicorn
+COPY requirements.lock .
+RUN pip install --no-cache-dir -r requirements.lock
 
 COPY . .
 

@@ -1,0 +1,6 @@
+lancedb
+tantivy
+ollama
+fastapi
+uvicorn
+sentence-transformers

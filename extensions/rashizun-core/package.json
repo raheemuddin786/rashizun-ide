@@ -12,7 +12,8 @@
   ],
   "activationEvents": [
     "onView:rashizun-ledger",
-    "onView:rashizun-security"
+    "onView:rashizun-security",
+    "onView:rashizun-rag"
   ],
   "main": "./extension.js",
   "contributes": {

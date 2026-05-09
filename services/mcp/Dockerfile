@@ -1,7 +1,6 @@
 FROM node:20-slim
 
 # Architecture-neutral service
-ARG TARGETARCH
 
 WORKDIR /app
 
