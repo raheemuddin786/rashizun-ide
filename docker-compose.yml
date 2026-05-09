@@ -17,7 +17,8 @@ services:
     volumes:
       - ./workspace:/app/workspace
       - ./.rashizun:/app/.rashizun
-      - ./data/lancedb:/app/data/lancedb
+      - ./data/chroma:/app/data/chroma
+      - ./extensions/rashizun-core:/app/extensions/rashizun-core
     environment:
       - PUID=1000
       - PGID=1000

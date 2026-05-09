@@ -7,6 +7,8 @@ services:
         TARGETARCH: ${TARGETARCH:-amd64}
     container_name: rashizun-mcp-core
     volumes:
+      - ./services/mcp:/app
+      - /app/node_modules
       - ./.rashizun/ledger.json:/app/ledger.json
       - ./package.json:/app/package.json
       - ./scripts:/app/scripts

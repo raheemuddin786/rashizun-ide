@@ -5,7 +5,7 @@
   "version": "1.0.0",
   "publisher": "rashizun",
   "engines": {
-    "vscode": "^1.70.0"
+    "vscode": "*"
   },
   "categories": [
     "Other"
@@ -17,6 +17,7 @@
     "onView:rashizun-rag"
   ],
   "main": "./extension.js",
+  "browser": "./extension.js",
   "contributes": {
     "viewsContainers": {
       "activitybar": [
@@ -100,6 +101,10 @@
             "id": "lifecycle",
             "title": "The 7-Stage Lifecycle",
             "description": "Use the Lifecycle Sidebar (Astrolabe icon) to move from Discovery to Maintenance. Each stage provides context for your AI interactions.",
+            "media": {
+              "image": "media/astrolabe.png",
+              "altText": "Rashizun Lifecycle"
+            },
             "completionEvents": [
               "onView:rashizun-lifecycle"
             ]
@@ -108,6 +113,10 @@
             "id": "ledger",
             "title": "Project Ledger",
             "description": "Every major decision is tracked in the Project Ledger. This ensures architectural provenance and auditability for your code.",
+            "media": {
+              "image": "media/astrolabe.png",
+              "altText": "Rashizun Ledger"
+            },
             "completionEvents": [
               "onView:rashizun-ledger"
             ]

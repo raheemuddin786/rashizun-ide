@@ -1,13 +1,13 @@
 const vscode = require('vscode');
-const path = require('path');
-const fs = require('fs');
 
 function getWorkspaceRoot() {
-    return vscode.workspace.workspaceFolders?.[0].uri.fsPath || '';
+    return vscode.workspace.workspaceFolders?.[0].uri;
 }
 
 function resolveScriptPath(scriptRelativePath) {
-    return path.join(getWorkspaceRoot(), scriptRelativePath);
+    const root = getWorkspaceRoot();
+    if (!root) return null;
+    return vscode.Uri.joinPath(root, scriptRelativePath);
 }
 
 function sanitizeInput(input) {
@@ -15,15 +15,17 @@ function sanitizeInput(input) {
     return input.trim();
 }
 
-function safeReadJson(filePath) {
+async function safeReadJson(fileUri) {
     try {
-        if (fs.existsSync(filePath)) {
-            return JSON.parse(fs.readFileSync(filePath, 'utf8'));
-        }
+        if (!fileUri) return null;
+        
+        // Use VS Code's web-safe FileSystem API
+        const content = await vscode.workspace.fs.readFile(fileUri);
+        return JSON.parse(new TextDecoder().decode(content));
     } catch (e) {
-        Logger.error(`Failed to read JSON from ${filePath}`, e);
+        // Silently fail if file doesn't exist (common for initialization)
+        return null;
     }
-    return null;
 }
 
 class Logger {
@@ -35,9 +37,6 @@ class Logger {
     }
     static error(message, error) {
         console.error(`[Rashizun ERROR] ${message}`, error);
-        if (error?.message) {
-            vscode.window.showErrorMessage(`Rashizun Error: ${message} (${error.message})`);
-        }
     }
 }
 

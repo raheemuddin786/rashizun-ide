@@ -1,7 +1,3 @@
-const { getWorkspaceRoot, safeReadJson } = require('./utils');
-const path = require('path');
-const fs = require('fs');
-
 function getBaseHtml(title, bodyContent, styleUri, scripts = '') {
     return `<!DOCTYPE html>
     <html>
@@ -37,12 +33,7 @@ function getStageHtml(stage, styleUri) {
         sprint: { title: "3. Sprint Planning", icon: "📅", desc: "Iterative roadmaps and workload estimation.", actions: ["Plan Sprint", "Assign Tasks"] },
         development: { title: "4. Development", icon: "💻", desc: "AI-assisted implementation and shadow builds.", actions: ["Ghost Text Settings", "Run Shadow Build"] },
         testing: { title: "5. Testing", icon: "🧪", desc: "Automated SAST/DAST and compliance checks.", actions: ["Run Tests", "Security Scan"] },
-        deployment: { 
-            title: "6. Deployment", 
-            icon: "🚀", 
-            desc: "Cloud-agnostic deployment via MCP skills.", 
-            actions: ["Deploy Staging", "Release Prod", "List Skills"] 
-        },
+        deployment: { title: "6. Deployment", icon: "🚀", desc: "Cloud-agnostic deployment via MCP skills.", actions: ["Deploy Staging", "Release Prod", "List Skills"] },
         maintenance: { title: "7. Maintenance", icon: "🛠️", desc: "Observability and automated retraining loops.", actions: ["View Logs", "Check Drift"] }
     };
 
@@ -77,10 +68,8 @@ function getStageHtml(stage, styleUri) {
     return getBaseHtml("RASHIZUN", body, styleUri, scripts);
 }
 
-function getLedgerHtml(styleUri) {
+function getLedgerHtml(styleUri, ledger) {
     let ledgerCards = "";
-    const ledgerPath = path.join(getWorkspaceRoot(), '.rashizun', 'ledger.json');
-    const ledger = safeReadJson(ledgerPath);
 
     if (ledger && ledger.architectural_decisions) {
         ledgerCards = ledger.architectural_decisions.map(ad => `
@@ -133,7 +122,7 @@ function getRagHtml(styleUri) {
         <div class="card" style="border-left: 4px solid var(--rashizun-accent);">
             <h2>Vector Store</h2>
             <div class="status-badge">CONNECTED</div>
-            <div class="ledger-item">Engine: LanceDB / Tantivy</div>
+            <div class="ledger-item">Engine: ChromaDB / Tantivy</div>
             <div class="health-row">
                 <span>RAG Service: <span id="ragStatus">Checking...</span></span>
                 <span class="health-dot" id="ragDot"></span>
@@ -180,7 +169,6 @@ function getRagHtml(styleUri) {
             }
         });
 
-        // Staggered health check to avoid startup IPC congestion
         setTimeout(checkHealth, 2000);
         setInterval(checkHealth, 30000);`;
 
