@@ -1,0 +1,96 @@
+:root {
+    --rashizun-indigo: #1a1b26;
+    --rashizun-gold: #c0caf5; /* Using a softer gold for text */
+    --rashizun-accent: #7aa2f7;
+    --rashizun-bg: rgba(26, 27, 38, 0.95);
+    --rashizun-glass: rgba(255, 255, 255, 0.05);
+}
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    padding: 15px;
+    color: var(--vscode-foreground);
+    background: var(--rashizun-indigo);
+    line-height: 1.6;
+}
+
+.card {
+    background: var(--rashizun-glass);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(10px);
+    border-radius: 8px;
+    padding: 12px;
+    margin-bottom: 12px;
+    transition: transform 0.2s, border-color 0.2s;
+}
+
+.card:hover {
+    transform: translateY(-2px);
+    border-color: var(--rashizun-accent);
+}
+
+.header {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 20px;
+}
+
+.logo-text {
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    font-size: 14px;
+    color: var(--rashizun-accent);
+}
+
+h2 {
+    font-size: 12px;
+    font-weight: 600;
+    margin: 0;
+    opacity: 0.7;
+    text-transform: uppercase;
+}
+
+.status-badge {
+    display: inline-block;
+    padding: 4px 10px;
+    border-radius: 20px;
+    font-size: 10px;
+    font-weight: bold;
+    background: var(--rashizun-accent);
+    color: var(--rashizun-indigo);
+    margin-top: 5px;
+}
+
+.action-btn {
+    background: var(--rashizun-accent);
+    color: var(--rashizun-indigo);
+    border: none;
+    padding: 8px 16px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-weight: bold;
+    width: 100%;
+    margin-top: 10px;
+    transition: opacity 0.2s;
+}
+
+.action-btn:hover {
+    opacity: 0.9;
+}
+
+.ledger-item {
+    font-size: 11px;
+    padding: 8px 0;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.ledger-item:last-child {
+    border-bottom: none;
+}
+
+.ad-id {
+    color: var(--rashizun-accent);
+    font-weight: bold;
+}

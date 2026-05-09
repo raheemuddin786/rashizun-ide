@@ -71,6 +71,11 @@
           "id": "rashizun-security",
           "name": "🛡️ Security Center",
           "type": "webview"
+        },
+        {
+          "id": "rashizun-rag",
+          "name": "🧠 RAG Explorer",
+          "type": "webview"
         }
       ]
     },

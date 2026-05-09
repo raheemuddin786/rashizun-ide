@@ -1,0 +1,22 @@
+{
+  "nameShort": "Rashizun",
+  "nameLong": "Rashizun Development Orchestrator",
+  "applicationName": "rashizun",
+  "linuxIconName": "rashizun",
+  "quality": "stable",
+  "urlProtocol": "rashizun",
+  "serverApplicationName": "rashizun-server",
+  "serverDataFolderName": ".rashizun-server",
+  "darwinBundleIdentifier": "com.rashizun.ide",
+  "win32AppUserModelId": "Rashizun.IDE",
+  "win32DirName": "Rashizun",
+  "win32MutexName": "rashizun",
+  "win32NameVersion": "Rashizun",
+  "win32RegValueName": "Rashizun",
+  "win32ShellNameShort": "Rashizun",
+  "welcomePage": "rashizun.rashizun-core",
+  "reportIssueUrl": "https://github.com/rashizun/rashizun-ide/issues",
+  "requestFeatureUrl": "https://github.com/rashizun/rashizun-ide/issues/new",
+  "documentationUrl": "https://github.com/rashizun/rashizun-ide/blob/master/docs/master_specification.md",
+  "releaseNotesUrl": "https://github.com/rashizun/rashizun-ide/blob/master/release_notes.md"
+}

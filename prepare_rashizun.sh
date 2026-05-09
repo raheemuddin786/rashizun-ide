@@ -74,14 +74,16 @@ if [[ -f resources/linux/debian/control.template ]]; then
 fi
 
 # Inject Rashizun Core extension
-echo "Injecting Rashizun Core extension..."
+echo "Injected Rashizun Core Extension"
 mkdir -p extensions/rashizun-core
 cp -r ../extensions/rashizun-core/* extensions/rashizun-core/
 
-# Register as built-in extension in product.json
-# Note: In Code-OSS, built-in extensions are usually handled by the build script, 
-# but we can explicitly add it to product.json if needed or just place it in the extensions folder.
-# VSCodium/Code-OSS picks up extensions in the extensions/ directory during the build.
+# Apply Rashizun Branding to product.json
+if [ -f "../rashizun-branding.json" ]; then
+    jq -s '.[0] * .[1]' product.json ../rashizun-branding.json > product.json.tmp && mv product.json.tmp product.json
+fi
+
+echo "Rashizun Core Integration Complete."
 
 # Final branding touch
 echo "Rashizun adaptation complete."
