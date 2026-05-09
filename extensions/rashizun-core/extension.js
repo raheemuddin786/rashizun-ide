@@ -65,7 +65,8 @@ async function activate(context) {
     // 3. Register MCP Bridge
     context.subscriptions.push(vscode.commands.registerCommand('rashizun.mcp.callTool', async (name, args) => {
         try {
-            const response = await fetch(`/mcp-api/call`, {
+            const baseUrl = `http://${vscode.env.remoteAuthority}`;
+            const response = await fetch(`${baseUrl}/mcp-api/call`, {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({ name, arguments: args })
